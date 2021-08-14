@@ -1,0 +1,76 @@
+:root {
+  --color-light-purple: #E8D6FF;
+  --color-light-green: #D6FFF8;
+}
+
+body {
+  margin: 0;
+  font-family: "Yu Gothic", 游ゴシック, YuGothic, 游ゴシック体, "ヒラギノ角ゴ Pro W3", メイリオ, sans-serif;
+}
+
+main {
+  max-width: 1000px;
+  width: 100%;
+  margin: 100px auto;
+}
+
+table {
+  width: 480px;
+  height: 480px;
+
+  margin: 0 auto;
+  border: 2px solid #000;
+  border-collapse: separate;
+  border-radius: 3px;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+table td {
+  border-bottom: 1px solid #000;
+  border-left: 1px solid #000;
+  position: relative;
+}
+
+table td:first-child {
+  border-left: none;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table td::before {
+  content: attr(data-num);
+  position: absolute;
+  font-size: 14px;
+  font-weight: bold;
+  top: 3px;
+  left: 3px;
+}
+
+table td::after {
+  content: attr(data-val);
+  position: absolute;
+  font-size: 30px;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+table td.black {
+  background-color: #000;
+}
+
+table td.focus-both {
+  background: linear-gradient(45deg, var(--color-light-purple) 0%, var(--color-light-purple) 50%, var(--color-light-green) 50%, var(--color-light-green) 100%);
+}
+
+table td.focus-column {
+  background-color: var(--color-light-purple);
+}
+
+table td.focus-row {
+  background-color: var(--color-light-green);
+}
