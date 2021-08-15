@@ -1,6 +1,8 @@
 :root {
   --color-light-purple: #E8D6FF;
   --color-light-green: #D6FFF8;
+  --color-green: #ADFFF1;
+  --color-purple: #D1ADFF;
 }
 
 body {
@@ -19,25 +21,32 @@ table {
   height: 480px;
 
   margin: 0 auto;
-  border: 2px solid #000;
-  border-collapse: separate;
-  border-radius: 3px;
+  border-collapse: collapse;
+  border: none;
+  box-sizing: content-box;
   border-spacing: 0;
   table-layout: fixed;
 }
 
 table td {
-  border-bottom: 1px solid #000;
-  border-left: 1px solid #000;
   position: relative;
+  border: 1px solid #000;
 }
 
-table td:first-child {
-  border-left: none;
+table td:first-of-type {
+  border-left: 1px solid #FFF;
 }
 
-table tr:last-child td {
-  border-bottom: none;
+table td:last-of-type {
+  border-right: 1px solid #FFF;
+}
+
+table tr:first-of-type td {
+  border-top: 1px solid #FFF;
+}
+
+table tr:last-of-type td {
+  border-bottom: 1px solid #FFF;
 }
 
 table td::before {
@@ -73,4 +82,103 @@ table td.focus-column {
 
 table td.focus-row {
   background-color: var(--color-light-green);
+}
+
+table td[data-num] {
+  cursor: pointer;
+}
+
+.crossword-wrapper {
+  position: relative;
+}
+
+.frame {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border: 2px solid #000;
+  border-radius: 3px;
+  box-sizing: border-box;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.question-lists {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 100px;
+}
+
+.question-lists > div {
+  max-width: 480px;
+  min-width: calc((100% - 40px) / 2);
+  cursor: pointer;
+}
+
+.question-lists > div > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  border-bottom: 2px solid #FFF;
+  padding-right: 60px;
+  position: relative;
+}
+
+.question-lists > div > div::before {
+  content: "";
+  width: 40px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--button-color);
+}
+
+.question-lists > div > div > span {
+  padding: 0 20px;
+  font-weight: bold;
+}
+
+.question-lists > div > div > div {
+  padding: 5px 0;
+  width: 100%;
+  text-align: justify;
+}
+
+.question-lists .key-row > div {
+  --button-color: var(--color-green);
+  background-color: var(--color-light-green);
+}
+
+.question-lists .key-column > div {
+  --button-color: var(--color-purple);
+  background-color: var(--color-light-purple);
+}
+
+.question-lists div.keyword {
+  text-align: right;
+}
+
+.question-lists div.keyword span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  background-color: #FFF;
+  position: relative;
+}
+
+.question-lists div.keyword span::before {
+  content: attr(data-val);
+  position: absolute;
+  font-size: 14px;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
