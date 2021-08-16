@@ -119,7 +119,7 @@ table td[data-num] {
   cursor: pointer;
 }
 
-.question-lists > div > div {
+.question-lists .question-tile {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -129,7 +129,7 @@ table td[data-num] {
   position: relative;
 }
 
-.question-lists > div > div::before {
+.question-lists .question-tile::before {
   content: "";
   width: 40px;
   height: 100%;
@@ -139,23 +139,31 @@ table td[data-num] {
   background-color: var(--button-color);
 }
 
-.question-lists > div > div > span {
+.question-lists .question-tile::after {
+  content: url(../img/arrow.svg);
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+}
+
+.question-lists .question-tile > span {
   padding: 0 20px;
   font-weight: bold;
 }
 
-.question-lists > div > div > div {
-  padding: 5px 0;
+.question-lists .question-tile > div {
+  padding: 5px 0 0;
   width: 100%;
   text-align: justify;
 }
 
-.question-lists .key-row > div {
+.question-lists .key-row .question-tile{
   --button-color: var(--color-green);
   background-color: var(--color-light-green);
 }
 
-.question-lists .key-column > div {
+.question-lists .key-column .question-tile {
   --button-color: var(--color-purple);
   background-color: var(--color-light-purple);
 }
@@ -168,9 +176,13 @@ table td[data-num] {
   display: inline-block;
   width: 20px;
   height: 20px;
-  margin-top: 3px;
+  margin: 3px 0 0 5px;
   background-color: #FFF;
   position: relative;
+}
+
+.question-lists div.keyword span[data-type="const"] {
+  background: none;
 }
 
 .question-lists div.keyword span::before {
