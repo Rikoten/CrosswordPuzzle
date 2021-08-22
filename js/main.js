@@ -1,5 +1,6 @@
 const squareSize = 60
 const table = document.querySelector('table')
+let tdList = []
 let json = ''
 let boardInfo = {
   Wsize: 0,
@@ -71,14 +72,12 @@ squareInfo: {
     }
   }
 
-  console.log(boardInfo)
-
   // 盤面と問題表示
   displayBoard()
   displayQuestion()
 
   // 盤面ホバーアクション
-  const tdList = table.querySelectorAll('td')
+  tdList = table.querySelectorAll('td')
 
   for(const td of tdList) {
     const index = [].slice.call(tdList).indexOf(td)
@@ -95,13 +94,27 @@ squareInfo: {
 
   // イベントリスナの設定
   showInputAnswerWindow()
+  // submitKeyword()
 })()
 
 const displayBoard = () => {
   const html = []
 
-  table.style.width = boardInfo.Wsize * squareSize + 'px'
-  table.style.height = boardInfo.Hsize * squareSize + 'px'
+  const frame = document.querySelector('.frame')
+  if(document.body.clientWidth < 480) {
+    frame.style.width = frame.style.height = table.style.width = table.style.height = document.body.clientWidth + 'px'
+  } else {
+    frame.style.width = frame.style.height = table.style.width = table.style.height = boardInfo.Wsize * squareSize + 'px'
+  }
+
+  window.addEventListener('resize', () => {
+    if(document.body.clientWidth < 480) {
+      const frame = document.querySelector('.frame')
+      frame.style.width = frame.style.height = table.style.width = table.style.height = document.body.clientWidth + 'px'
+    } else {
+      frame.style.width = frame.style.height = table.style.width = table.style.height = boardInfo.Wsize * squareSize + 'px'
+    }
+  })
 
   for(const row of json.initialState) {
     html.push('<tr>')
@@ -123,7 +136,7 @@ const displayQuestion = () => {
 
     Object.keys(json.question[direction]).forEach(key => {
       const span = []
-      const [i, j] = getCoordinateFromInitialState(key)
+      const [i, j] = getCoordsFromInitialState(key)
       const questionList = (direction === 'row' ? json.question.row : json.question.column)
       const answerLenList = (direction === 'row' ? boardInfo.answerLen.row : boardInfo.answerLen.column)
   
@@ -131,7 +144,7 @@ const displayQuestion = () => {
         const [I, J] = (direction === 'row' ? [i, j + k] : [i + k, j])
         const type = boardInfo.squareInfo[`${I}-${J}`].type
         span.push(`<span data-type = ${type} 
-                         data-coordinate = ${I}-${J}
+                         data-coords = ${I}-${J}
                          data-val = ${type === 'const' ? json.initialState[I][J] : ''}>
                   </span>`)
       }
@@ -149,7 +162,7 @@ const displayQuestion = () => {
       `)
     })
 
-    document.querySelector(`.key-${direction}`).insertAdjacentHTML('afterbegin', html.join(''))
+    document.querySelector(`.key-${direction}`).insertAdjacentHTML('beforeend', html.join(''))
   })
 }
 
@@ -170,7 +183,7 @@ const focusSquare = (tdList, index, num) => {
   }
 }
 
-const getCoordinateFromInitialState = (val) => {
+const getCoordsFromInitialState = (val) => {
   for(const [i, row] of json.initialState.entries()) {
     for(const [j, square] of row.entries()) {
       if(square === val) return [i, j]
@@ -180,5 +193,101 @@ const getCoordinateFromInitialState = (val) => {
 }
 
 const showInputAnswerWindow = () => {
+  const questionList = document.querySelector('.question-list')
+
+  document.querySelectorAll('.question-tile').forEach(question => {
+    question.addEventListener('click', () => {
+      const num = question.querySelector('span').textContent
+      const desc = question.querySelector('div > div').textContent
+      const placeholder = []
+      const coords = []
+
+      noScroll()
+
+      question.querySelectorAll('.keyword span').forEach(span => {
+        const val = span.getAttribute('data-val')
+
+        if(span.getAttribute('data-type') == 'const') {
+          placeholder.push(val)
+          coords.push('')
+        } else {
+          placeholder.push(val === '' ? '＿' : val)
+          coords.push(span.getAttribute('data-coords'))
+        }
+      })
+
+      const html = `
+        <div class = "back">
+          <form class = "input-window">
+            <span>×</span>
+            <div class = "question">
+              <span>${num}</span>
+              <div>${desc}</div>
+            </div>
+            <div class = "entry-field">
+              <input type = "text" name = "${coords.join(',')}" autocomplete = "off" maxlength = "${coords.length}" pattern = "^[ぁ-んァ-ンヴーｦ-ﾝ]+$" placeholder = "${placeholder.join('')}">
+            </div>
+            <input type = "submit" value = "決定">
+          </form>
+        </div>
+      `
+      questionList.insertAdjacentHTML('afterend', html)
+      if(document.querySelector('.entry-field input')) document.querySelector('.entry-field input').focus()
+
+      document.querySelector('form').onsubmit = (e) => {
+        e.preventDefault()
+        const input = e.target.querySelector('input')
+        const value = input.value.split('')
+
+        input.name.split(',').forEach((coords, index) => {
+          if(coords) {
+            const [i, j] = coords.split('-').map(index => Number.parseInt(index))
+            tdList[i * boardInfo.Wsize + j].setAttribute('data-val', value[index] || '')
+            document.querySelectorAll(`span[data-coords="${coords}"]`).forEach(span => span.setAttribute('data-val', value[index] || ''))
+          }
+        })
+        e.target.parentNode.remove()
+        allowScroll()
+      }
+
+      document.querySelector('.back').addEventListener('click', (e) => {
+        if(e.target.classList.contains('back')) {
+          document.querySelector('.back').remove()
+          allowScroll()
+        }
+      })
+      document.querySelector('.input-window > span').addEventListener('click', () => {
+        document.querySelector('.back').remove()
+        allowScroll()
+      })
+    })
+  })
+}
+
+const noScroll = () => {
+  document.addEventListener('touchmove', disableScroll, { passive: false })
+  document.addEventListener('wheel', disableScroll, { passive: false })
+  document.body.style.overflow = 'hidden'
+}
+
+const allowScroll = () => {
+  document.removeEventListener('touchmove', disableScroll, { passive: false })
+  document.removeEventListener('wheel', disableScroll, { passive: false })
+  document.body.style.overflow = 'visible'
+}
+
+function disableScroll(e) {
+  e.preventDefault()
+}
+
+const hiraganaToKatakana = () => {
+
+}
+
+const hankakuKatakanaToKatakana = () => {
+
+}
+
+const toUpperKatakana = () => {
 
 }

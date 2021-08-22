@@ -3,6 +3,8 @@
   --color-light-green: #D6FFF8;
   --color-green: #ADFFF1;
   --color-purple: #D1ADFF;
+  --color-dark-green: #34FFDD;
+  --color-dark-purple: #8C34FF;
 }
 
 body {
@@ -106,20 +108,21 @@ table td[data-num] {
   pointer-events: none;
 }
 
-.question-lists {
+.question-list {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 100px;
 }
 
-.question-lists > div {
+.question-list > div {
   max-width: 480px;
   min-width: calc((100% - 40px) / 2);
   cursor: pointer;
+  margin: 30px 0 0;
 }
 
-.question-lists .question-tile {
+.question-list .question-tile {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -129,7 +132,7 @@ table td[data-num] {
   position: relative;
 }
 
-.question-lists .question-tile::before {
+.question-list .question-tile::before {
   content: "";
   width: 40px;
   height: 100%;
@@ -137,42 +140,84 @@ table td[data-num] {
   top: 0;
   right: 0;
   background-color: var(--button-color);
+  z-index: 1;
+  transition: .2s;
 }
 
-.question-lists .question-tile::after {
+.question-list .question-tile::after {
   content: url(../img/arrow.svg);
   position: absolute;
   top: 50%;
   right: 16px;
   transform: translateY(-50%);
+  z-index: 2;
+  transition: .2s;
 }
 
-.question-lists .question-tile > span {
+.question-list .question-tile:hover::before {
+  animation-name: question-tile;
+  animation-duration: .4s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes question-tile {
+  0% {
+    width: 40px;
+  }
+  40% {
+    width: 40px;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.question-list .question-tile:hover::after {
+  right: 12px;
+}
+
+.question-list .question-tile > span {
   padding: 0 20px;
   font-weight: bold;
+  position: relative;
+  z-index: 3;
 }
 
-.question-lists .question-tile > div {
+.question-list .question-tile > div {
   padding: 5px 0 0;
   width: 100%;
   text-align: justify;
+  position: relative;
+  z-index: 3;
 }
 
-.question-lists .key-row .question-tile{
+.question-list .key-row > p {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-dark-green);
+}
+
+.question-list .key-column > p {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-dark-purple);
+}
+
+.question-list .key-row .question-tile{
   --button-color: var(--color-green);
   background-color: var(--color-light-green);
 }
 
-.question-lists .key-column .question-tile {
+.question-list .key-column .question-tile {
   --button-color: var(--color-purple);
   background-color: var(--color-light-purple);
 }
 
-.question-lists div.keyword {
+.question-list div.keyword {
   text-align: right;
 }
 
-.question-lists div.keyword span {
+.question-list div.keyword span {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -181,11 +226,11 @@ table td[data-num] {
   position: relative;
 }
 
-.question-lists div.keyword span[data-type="const"] {
+.question-list div.keyword span[data-type="const"] {
   background: none;
 }
 
-.question-lists div.keyword span::before {
+.question-list div.keyword span::before {
   content: attr(data-val);
   position: absolute;
   font-size: 14px;
@@ -193,4 +238,152 @@ table td[data-num] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.back {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.input-window {
+  max-width: 480px;
+  width: 100%;
+  border-radius: 5px;
+  background-color: var(--color-light-green);
+  text-align: right;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.input-window > span {
+  font-size: 30px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.input-window .question {
+  display: flex;
+}
+
+.input-window .question span {
+  padding: 0 20px;
+  font-weight: bold;
+}
+
+.input-window .question div {
+  padding-right: 20px;
+  text-align: justify;
+}
+
+.input-window .entry-field {
+  margin: 40px 0;
+  text-align: center;
+}
+
+.input-window .entry-field input::placeholder {
+  color: rgba(0, 0, 0, .15);
+}
+
+.input-window .entry-field span,
+.input-window .entry-field input:not([type="submit"]) {
+  width: 50px;
+  height: 70px;
+  font-size: 40px;
+  text-align: center;
+  font-weight: bold;
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.input-window .entry-field input:not([type="submit"]) {
+  font-size: 36px;
+  border-radius: 5px;
+  width: 60%;
+  border: none;
+  appearance: none;
+  outline: none;
+}
+
+.input-window input[type="text"] {
+  letter-spacing: .3em;
+  text-indent: .3em;
+}
+
+.input-window input[type="submit"] {
+  height: 60px;
+  width: 100%;
+  outline: none;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  background-color: var(--color-green);
+  border-radius: 0 0 5px 5px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1000px) {
+  .question-list {
+    flex-direction: column;
+  }
+
+  .question-list > div {
+    margin: 30px auto 0;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  table td::before {
+    font-size: 12px;
+    top: 0;
+  }
+
+  table td::after {
+    font-size: 26px;
+  }
+
+  .input-window {
+    width: 100%;
+    bottom: 0;
+    top: auto;
+    transform: translate(-50%, 0);
+    border-radius: 10px 10px 0 0;
+
+    animation: input-window-open;
+    animation-duration: .3s;
+    animation-fill-mode: forwards;
+  }
+
+  .input-window .entry-field input:not([type="submit"]) {
+    font-size: 28px;
+    height: 55px;
+  }
+
+  @keyframes input-window-open {
+    0% {
+      transform: translate(-50%, 10%);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+
+  .question-list .question-tile > div {
+    font-size: 14px;
+  }
+
+  .question-list .question-tile:hover::after {
+    right: 16px;
+  }
 }
