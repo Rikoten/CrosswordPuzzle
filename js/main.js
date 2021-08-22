@@ -37,6 +37,14 @@ squareInfo: {
   json = await fetch('./data/puzzleData.json').then(res => res.json())
 
   // 初期化
+  /*
+  document.documentElement.style.setProperty( '--vh', window.innerHeight / 100 + 'px')
+  window.addEventListener('resize', () => {
+    document.documentElement.style.setProperty( '--vh', window.innerHeight / 100 + 'px')
+    console.log(window.innerHeight)
+  })
+  */
+
   boardInfo.Wsize = json.initialState[0].length
   boardInfo.Hsize = json.initialState.length
   boardInfo.answerLen = {

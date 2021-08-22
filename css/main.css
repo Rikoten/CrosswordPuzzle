@@ -256,7 +256,7 @@ table td[data-num] {
   border-radius: 5px;
   background-color: var(--color-light-green);
   text-align: right;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -381,6 +381,10 @@ table td[data-num] {
 
   .question-list .question-tile > div {
     font-size: 14px;
+  }
+
+  .question-list .question-tile:hover::before {
+    animation: none;
   }
 
   .question-list .question-tile:hover::after {
