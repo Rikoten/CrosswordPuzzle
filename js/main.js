@@ -110,7 +110,7 @@ const displayBoard = () => {
 
   const frame = document.querySelector('.frame')
   if(document.body.clientWidth < 480 || boardInfo.Wsize !== 8) {
-    const Wsize = boardInfo.Wsize * squareSize < 480 ? document.body.clientWidth : boardInfo.Wsize * squareSize
+    const Wsize = document.body.clientWidth < 480 ? document.body.clientWidth : boardInfo.Wsize * squareSize
     frame.style.width = frame.style.height = table.style.width = table.style.height = Wsize + 'px'
   } else {
     frame.style.width = frame.style.height = table.style.width = table.style.height = boardInfo.Wsize * squareSize + 'px'
