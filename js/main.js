@@ -34,7 +34,7 @@ squareInfo: {
 ***********************************/
 
 ;(async() => {
-  json = await fetch('./data/puzzleData.json').then(res => res.json())
+  json = await fetch('./data/puzzleData2.json').then(res => res.json())
 
   // 初期化
   /*
@@ -109,7 +109,7 @@ const displayBoard = () => {
   const html = []
 
   const frame = document.querySelector('.frame')
-  if(document.body.clientWidth < 480) {
+  if(document.body.clientWidth < 480 || boardInfo.Wsize !== 8) {
     frame.style.width = frame.style.height = table.style.width = table.style.height = document.body.clientWidth + 'px'
   } else {
     frame.style.width = frame.style.height = table.style.width = table.style.height = boardInfo.Wsize * squareSize + 'px'

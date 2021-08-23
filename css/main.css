@@ -376,7 +376,7 @@ input[type="submit"]::focus {
   }
 
   table td::after {
-    font-size: 26px;
+    font-size: 22px;
   }
 
   .input-window {
