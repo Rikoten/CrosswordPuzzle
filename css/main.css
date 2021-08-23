@@ -112,7 +112,7 @@ table td[data-num] {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-top: 100px;
+  margin-top: 30px;
 }
 
 .question-list > div {
@@ -122,7 +122,7 @@ table td[data-num] {
   margin: 30px 0 0;
 }
 
-.question-list .question-tile {
+.question-tile {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -132,7 +132,7 @@ table td[data-num] {
   position: relative;
 }
 
-.question-list .question-tile::before {
+.question-tile::before {
   content: "";
   width: 40px;
   height: 100%;
@@ -144,7 +144,7 @@ table td[data-num] {
   transition: .2s;
 }
 
-.question-list .question-tile::after {
+.question-tile::after {
   content: url(../img/arrow.svg);
   position: absolute;
   top: 50%;
@@ -154,7 +154,7 @@ table td[data-num] {
   transition: .2s;
 }
 
-.question-list .question-tile:hover::before {
+.question-tile:hover::before {
   animation-name: question-tile;
   animation-duration: .4s;
   animation-fill-mode: forwards;
@@ -172,18 +172,18 @@ table td[data-num] {
   }
 }
 
-.question-list .question-tile:hover::after {
+.question-tile:hover::after {
   right: 12px;
 }
 
-.question-list .question-tile > span {
+.question-tile > span {
   padding: 0 20px;
   font-weight: bold;
   position: relative;
   z-index: 3;
 }
 
-.question-list .question-tile > div {
+.question-tile > div {
   padding: 5px 0 0;
   width: 100%;
   text-align: justify;
@@ -191,33 +191,46 @@ table td[data-num] {
   z-index: 3;
 }
 
-.question-list .key-row > p {
+.key-row > p {
   font-size: 20px;
   font-weight: bold;
   color: var(--color-dark-green);
 }
 
-.question-list .key-column > p {
+.key-column > p {
   font-size: 20px;
   font-weight: bold;
   color: var(--color-dark-purple);
 }
 
-.question-list .key-row .question-tile{
+.active-question > div {
+  max-width: 420px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.active-question .key-row,
+.active-question .key-column {
+  margin-top: 0;
+}
+
+.key-row .question-tile,
+.question-tile.key-row{
   --button-color: var(--color-green);
   background-color: var(--color-light-green);
 }
 
-.question-list .key-column .question-tile {
+.key-column .question-tile,
+.question-tile.key-column {
   --button-color: var(--color-purple);
   background-color: var(--color-light-purple);
 }
 
-.question-list div.keyword {
+div.keyword {
   text-align: right;
 }
 
-.question-list div.keyword span {
+div.keyword span {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -226,11 +239,11 @@ table td[data-num] {
   position: relative;
 }
 
-.question-list div.keyword span[data-type="const"] {
+div.keyword span[data-type="const"] {
   background: none;
 }
 
-.question-list div.keyword span::before {
+div.keyword span::before {
   content: attr(data-val);
   position: absolute;
   font-size: 14px;
@@ -260,6 +273,10 @@ table td[data-num] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.input-window.key-column {
+  background-color: var(--color-light-purple);
 }
 
 .input-window > span {
@@ -329,6 +346,10 @@ table td[data-num] {
   cursor: pointer;
 }
 
+.input-window.key-column input[type="submit"] {
+  background-color: var(--color-purple);
+}
+
 @media screen and (max-width: 1000px) {
   .question-list {
     flex-direction: column;
@@ -379,15 +400,15 @@ table td[data-num] {
     }
   }
 
-  .question-list .question-tile > div {
+  .question-tile > div {
     font-size: 14px;
   }
 
-  .question-list .question-tile:hover::before {
+  .question-tile:hover::before {
     animation: none;
   }
 
-  .question-list .question-tile:hover::after {
+  .question-tile:hover::after {
     right: 16px;
   }
 }

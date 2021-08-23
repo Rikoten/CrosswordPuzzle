@@ -96,7 +96,7 @@ squareInfo: {
     })
 
     td.addEventListener('click', () => {
-
+      clickSquare(num)
     })
   }
 
@@ -158,7 +158,7 @@ const displayQuestion = () => {
       }
   
       html.push(`
-        <div class = "question-tile">
+        <div class = "question-tile" data-num = "${key}">
           <span>${key}.</span>
           <div>
             <div>${questionList[key]}</div>
@@ -191,6 +191,19 @@ const focusSquare = (tdList, index, num) => {
   }
 }
 
+const clickSquare = (num) => {
+  const activeQuestion = document.querySelector('.active-question')
+  activeQuestion.innerHTML = ''
+
+  document.querySelectorAll(`.question-list .question-tile[data-num="${num}"]`).forEach(question => {
+    const clone = question.cloneNode(true)
+    clone.classList.add(question.parentNode.classList)
+    activeQuestion.insertAdjacentElement('beforeend', clone)
+
+    clone.addEventListener('click', () => question.click())
+  })
+}
+
 const getCoordsFromInitialState = (val) => {
   for(const [i, row] of json.initialState.entries()) {
     for(const [j, square] of row.entries()) {
@@ -204,7 +217,7 @@ const showInputAnswerWindow = () => {
   const questionList = document.querySelector('.question-list')
 
   document.querySelectorAll('.question-tile').forEach(question => {
-    question.addEventListener('click', () => {
+    question.addEventListener('click', (e) => {
       const num = question.querySelector('span').textContent
       const desc = question.querySelector('div > div').textContent
       const placeholder = []
@@ -226,8 +239,8 @@ const showInputAnswerWindow = () => {
 
       const html = `
         <div class = "back">
-          <form class = "input-window">
-            <span>×</span>
+          <form class = "input-window ${e.currentTarget.parentNode.classList}">
+          <span>×</span>
             <div class = "question">
               <span>${num}</span>
               <div>${desc}</div>
@@ -245,7 +258,7 @@ const showInputAnswerWindow = () => {
       document.querySelector('form').onsubmit = (e) => {
         e.preventDefault()
         const input = e.target.querySelector('input')
-        const value = input.value.split('')
+        const value = hiraganaToKatakana(input.value).split('')
 
         input.name.split(',').forEach((coords, index) => {
           if(coords) {
@@ -288,14 +301,9 @@ function disableScroll(e) {
   e.preventDefault()
 }
 
-const hiraganaToKatakana = () => {
-
-}
-
-const hankakuKatakanaToKatakana = () => {
-
-}
-
-const toUpperKatakana = () => {
-
+const hiraganaToKatakana = (src) => {
+  return src.replace(/[\u3041-\u3096]/g, match =>  {
+    const chr = match.charCodeAt(0) + 0x60;
+    return String.fromCharCode(chr);
+  });
 }
