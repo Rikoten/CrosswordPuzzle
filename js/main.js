@@ -253,7 +253,7 @@ const showInputAnswerWindow = () => {
         </div>
       `
       questionList.insertAdjacentHTML('afterend', html)
-      if(document.querySelector('.entry-field input')) document.querySelector('.entry-field input').focus()
+      if(document.querySelector('.entry-field input') && !(/iP(hone|(o|a)d)/.test(navigator.userAgent))) document.querySelector('.entry-field input').focus()
 
       document.querySelector('form').onsubmit = (e) => {
         e.preventDefault()

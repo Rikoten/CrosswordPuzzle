@@ -350,6 +350,13 @@ div.keyword span::before {
   background-color: var(--color-purple);
 }
 
+input[type="submit"]::-webkit-search-decoration {
+  display: none;
+}
+input[type="submit"]::focus {
+  outline-offset: -2px;
+}
+
 @media screen and (max-width: 1000px) {
   .question-list {
     flex-direction: column;
